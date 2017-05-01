@@ -1,0 +1,5 @@
+<library path="lib/libimage_flip">
+    <class name="image_flip/ImageFlip" type="image_flip::ImageFlip" base_class_type="nodelet::Nodelet">
+        <description>just flips images</description>
+    </class>
+</library>

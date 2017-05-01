@@ -1,0 +1,31 @@
+<launch>
+      <!-- -->
+      <!-- the nodelet manager -->
+      <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager" output="screen"/>
+      <!-- -->
+      <!-- an image source -->
+      <node pkg="nodelet" type="nodelet" name="mjepg_client" args="load mjpeg_client/MjpegClient nodelet_manager" output="screen">
+            <remap from="image" to="mjpeg_image"/>
+            <!-- someone's axis camera on the internet -->
+            <param name="server" value="207.115.90.134"/>
+            <param name="path" value="/axis-cgi/mjpg/video.cgi?camera=1"/>
+            <param name="timeout" value="5."/>
+            <param name="frame_id" value="mjpeg_camera"/>
+      </node>
+      <!-- -->
+      <!-- an image flipper -->
+      <node pkg="nodelet" type="nodelet" name="image_flip" args="load image_flip/ImageFlip nodelet_manager" output="screen">
+            <remap from="image_raw" to="mjpeg_image"/>
+            <remap from="image_flipped" to="flipped_mjpeg_image"/>
+            <param name="horizontal" value="true"/>
+            <param name="vertical" value="false"/>
+      </node>
+      <!-- -->
+      <!-- viewers -->
+      <node pkg="image_view" type="image_view" name="mjpeg_image_view" output="screen">
+            <remap from="image" to="mjpeg_image"/>
+      </node>
+      <node pkg="image_view" type="image_view" name="flipped_mjpeg_image_view" output="screen">
+            <remap from="image" to="flipped_mjpeg_image"/>
+      </node>
+</launch>
